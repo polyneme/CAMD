@@ -17,8 +17,11 @@ import shutil
 
 from monty.json import MSONable
 from camd.utils.data import s3_sync
-from camd import CAMD_S3_BUCKET
+from camd import CAMD_S3_BUCKET, CAMD_ROOT
 from camd.agent.base import RandomAgent
+
+from eliot import log_call, to_file
+to_file(open(os.path.join(CAMD_ROOT, f"eliot_{__name__}_.log"), "w"))
 
 
 class Campaign(MSONable):
@@ -35,6 +38,7 @@ class Campaign(MSONable):
     or black-box optimization with local or global optima search.
 
     """
+    @log_call
     def __init__(
         self,
         candidate_data,
@@ -119,6 +123,7 @@ class Campaign(MSONable):
             self.initialized = False
             self.loop_state = "UNSTARTED"
 
+    @log_call
     def run(self, finalize=False):
         """
         This method applies a single iteration of the loop, and
@@ -209,6 +214,7 @@ class Campaign(MSONable):
         self.save("iteration")
         return True
 
+    @log_call
     def auto_loop(self, n_iterations=10, monitor=False,
                   initialize=False, save_iterations=False):
         """
@@ -244,6 +250,7 @@ class Campaign(MSONable):
         self.run(finalize=True)
         self.finalize()
 
+    @log_call
     def initialize(self, random_state=42):
         """
         Initializes a campaign. The primary goal of initialization is to ensure a proper seed exists. If create_seed
@@ -303,6 +310,7 @@ class Campaign(MSONable):
         """
         return self.__class__.__name__
 
+    @log_call
     def finalize(self):
         """
         Run finalization method for campaign
@@ -355,6 +363,7 @@ class Campaign(MSONable):
             else:
                 self.__setattr__(data_holder, None)
 
+    @log_call
     def save(self, data_holder, custom_name=None, method="json"):
         """
         Save method for storing campaign data
@@ -387,6 +396,7 @@ class Campaign(MSONable):
         if self.s3_prefix:
             self.s3_sync()
 
+    @log_call
     def s3_sync(self):
         """
         Syncs current run to s3_prefix and bucket

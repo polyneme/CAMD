@@ -55,6 +55,7 @@ setup(
                       "scikit-learn==0.23.2",
                       "taburu==2020.5.9",
                       "GPy==1.9.9",
+                      "eliot==1.12.0",
                       ],
     extras_require={
         "proto_dft": ["protosearch==2020.5.10"],

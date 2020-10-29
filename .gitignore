@@ -101,3 +101,8 @@ ENV/
 
 # IntelliJ environment files
 .idea
+
+# Eliot logs
+eliot_*_.log
+
+camd/_cache/
